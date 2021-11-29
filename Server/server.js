@@ -2,13 +2,17 @@ const io = require("socket.io")(3000,{
     cors:["http://localhost:3001"]
 })
 
-io.on("connection",socket=>{
-    getUsersList()
+io.on("connection",async (socket)=>{
+    socket.on("user-connect",userName=>{
+        socket.data = userName
+        getUsersList()
+    })
 })
 
 async function getUsersList(){
-     const sockets = await io.fetchSockets()
+    const sockets = await io.fetchSockets()
     sockets.forEach(item=>{
-        io.emit("player-list",item.id)
+        console.log(item.data)
+        io.emit("player-list",{id:item.id,userName:item.data})
     })     
 }
