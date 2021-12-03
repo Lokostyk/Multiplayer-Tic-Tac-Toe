@@ -5,7 +5,9 @@ const io = require("socket.io")(3000,{
 io.on("connection",async (socket)=>{
     socket.on("user-connect",userName=>{
         socket.data = userName
-        getUsersList()
+        setTimeout(()=>{
+            getUsersList()
+        },10)
     })
 })
 

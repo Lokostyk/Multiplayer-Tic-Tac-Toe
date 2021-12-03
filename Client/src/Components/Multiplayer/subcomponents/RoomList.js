@@ -7,8 +7,9 @@ function RoomList() {
     let navigate = useNavigate()
     const [context,setContext] = useContext(Context)
     const [playerList,setPlayerList] = useState([])
-    
+    console.log(context)
     useEffect(()=>{
+        const currentList = []
         if(context === ""){
             navigate("/")
             return
@@ -18,16 +19,20 @@ function RoomList() {
         socket.emit("user-connect",context)
         socket.on("player-list",player=>{
             if(player.id !== socket.id){
-                setPlayerList([...playerList,player])
+                if(currentList.includes(player.id)) return
+                currentList.push(player.id)
+                setPlayerList(prev=>([...prev,player]))
             }
         })
     },[])
     return (
         <section className="roomContainer">
             <h1>Active players list</h1>
-            {playerList.map(item=>{
-                return <div key={item.id}>{item.userName}</div>
-            })}
+            <div className="playerListContainer">
+                {playerList.map(item=>{
+                    return <span key={item.id}>{item.userName},</span>
+                })}
+            </div>
         </section>
     )
 }
