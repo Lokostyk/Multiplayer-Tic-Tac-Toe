@@ -1,23 +1,12 @@
-import React,{useState,useEffect,useContext, useCallback} from 'react'
-import { useNavigate } from 'react-router'
-import {io} from "socket.io-client"
-import {Context} from "../../../App"
+import React,{useEffect,useState,useCallback,useContext} from 'react'
+import { Context } from '../../../App'
 
-function RoomList() {
-    let navigate = useNavigate()
-    const [context,setContext] = useContext(Context)
-    const [socket,setSocket] = useState()
+function RoomsInfo({socket,setPrivateRoomId}) {
     const [playerList,setPlayerList] = useState([])
-
+    const [context,setContext] = useContext(Context)
+    
     useEffect(()=>{
-        if(context === ""){
-            navigate("/")
-            return
-        } 
-
         const currentList = []
-        const socket = io("http://localhost:3000")
-        setSocket(socket)
 
         socket.emit("user-connect",context)
         socket.on("player-list",player=>{
@@ -29,10 +18,24 @@ function RoomList() {
         })
     },[])
 
+    const joinRoom = useCallback((e)=>{
+        e.preventDefault()
+        const formInput = e.target.querySelector(".codeInput").value
+        if(formInput.length > 4){
+            socket.emit("join-ROOM",formInput)
+            socket.on("response",res=>{
+                if(res === "connected"){
+                    setPrivateRoomId(formInput)
+                }else {
+                    console.log(res)
+                }
+            })
+        }
+    },[socket])
     const createRoom = useCallback(()=>{
         if(!socket) return
         const roomId = socket.id.slice(15)
-        window.location = `/${roomId}`
+        setPrivateRoomId(roomId)
     },[socket])
     return (
         <section className="roomContainer">
@@ -43,13 +46,13 @@ function RoomList() {
                 })}
             </div>
             <p>Game code:</p>
-            <form>
-                <input placeholder="code" />
+            <form onSubmit={e=>joinRoom(e)}>
+                <input className="codeInput" placeholder="code" />
+                <input type="submit" value="Join room" />
             </form>
-            <button>Join room</button>
             <button onClick={()=>createRoom()}>Create room</button>
         </section>
     )
 }
 
-export default RoomList
+export default RoomsInfo

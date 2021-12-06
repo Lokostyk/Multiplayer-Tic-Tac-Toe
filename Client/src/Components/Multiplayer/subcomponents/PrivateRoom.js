@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react'
-import { useLocation } from 'react-router'
-import { io } from 'socket.io-client'
 
-function PrivateRoom() {
-    const {pathname} = useLocation()
+function PrivateRoom({socket,roomId}) {
+    console.log(socket.id)
     useEffect(()=>{
-        const socket = io("http://localhost:3000")
-        
-        socket.emit("connect-to-room",pathname.slice(1))
+        socket.emit("connect-to-room",roomId)
+        socket.on("message",res=>{
+            console.log(res,"<======")
+        })
     },[])
     return (
         <div>
-            
+            <h1>{roomId}</h1>
+            <button onClick={()=>socket.emit("game-state",roomId,"YOOO")}>YOOOOO</button>
         </div>
     )
 }

@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import {Route,Routes} from "react-router-dom"
 
 import Multiplayer from './Components/Multiplayer/Multiplayer'
-import PrivateRoom from './Components/Multiplayer/subcomponents/PrivateRoom'
-import RoomList from './Components/Multiplayer/subcomponents/RoomList'
+import RoomHub from './Components/Multiplayer/subcomponents/RoomHub'
 
 export const Context = React.createContext()
 function App() {
@@ -13,8 +12,7 @@ function App() {
             <>  
                 <Routes>
                     <Route path="/" exact element={<Multiplayer />}/>
-                    <Route path="/multiplayer" element={<RoomList />}/>
-                    <Route path="/:id" element={<PrivateRoom />}/>
+                    <Route path="/multiplayer" element={<RoomHub />}/>
                 </Routes>
             </>
         </Context.Provider>
