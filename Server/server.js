@@ -3,16 +3,19 @@ const io = require("socket.io")(3000,{
 })
 
 io.on("connection",(socket)=>{
-    id = socket.id
+    let gameState;
+    console.log(gameState)
     socket.on("user-connect",userName=>{
         socket.data = userName
         getUsersList()
     })
     socket.on("join-ROOM",(id)=>{createRoom(id,socket)})
-    socket.on("connect-to-room",(roomId)=>joinRoom(roomId,socket))
-    socket.on("game-state",(res,roomId)=>{
-        console.log(io.sockets.adapter.rooms,socket.id)
-        io.to(roomId).emit("message",res)
+    socket.on("game-state-create",state=>{
+        gameState = state
+        io.in(roomId).emit("connect-to-room",state)
+    })
+    socket.on("connect-to-room",roomId=>{
+        socket.join(roomId)
     })
 })
 
@@ -34,8 +37,4 @@ async function createRoom(id,socket){
         }else {
             socket.emit("response","connected")
         }
-}
-
-function joinRoom(roomId,socket){
-    socket.join(roomId)
 }
