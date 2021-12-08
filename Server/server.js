@@ -3,19 +3,20 @@ const io = require("socket.io")(3000,{
 })
 
 io.on("connection",(socket)=>{
-    let gameState;
-    console.log(gameState)
     socket.on("user-connect",userName=>{
         socket.data = userName
         getUsersList()
     })
-    socket.on("join-ROOM",(id)=>{createRoom(id,socket)})
-    socket.on("game-state-create",state=>{
-        gameState = state
-        io.in(roomId).emit("connect-to-room",state)
-    })
-    socket.on("connect-to-room",roomId=>{
+    socket.on("create-room",(id)=>{createRoom(id,socket)})
+    socket.on("connect-to-room",(roomId,userName)=>{
         socket.join(roomId)
+        io.in(roomId).emit("connect-to-room",userName)
+    })
+    socket.on("create-game-state",(state,roomId)=>{
+        socket.to(roomId).emit("get-game-state",state)
+    })
+    socket.on("get-game-state",(state,roomId)=>{
+        io.to(roomId).emit("get-game-state",state)
     })
 })
 

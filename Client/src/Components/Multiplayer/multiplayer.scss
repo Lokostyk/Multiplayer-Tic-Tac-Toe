@@ -1,3 +1,4 @@
+@import "../../mainColors";
 .multiContainer {
   display: flex;
   flex-direction: column;
@@ -49,5 +50,14 @@
     border: 1px solid #34eb7d;
     background-color: rgba(52, 235, 125, 0.5);
     border-radius: 8px;
+  }
+}
+.gameRoomContaier {
+  height: 100vh;
+  h1 {
+    text-align: center;
+  }
+  .playerName {
+    text-align: center;
   }
 }

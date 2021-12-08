@@ -2,7 +2,6 @@ import React,{useEffect,useState,useCallback,useContext} from 'react'
 import { Context } from '../../../App'
 
 function RoomsInfo({socket,setPrivateRoomId}) {
-    const gameState = {p1:{name:"",sybmol:""},p2:{name:"",sybmol:""},gameTiles:[["","",""],["","",""],["","",""]]}
     const [playerList,setPlayerList] = useState([])
     const [context,setContext] = useContext(Context)
     
@@ -23,7 +22,7 @@ function RoomsInfo({socket,setPrivateRoomId}) {
         e.preventDefault()
         const formInput = e.target.querySelector(".codeInput").value
         if(formInput.length > 4){
-            socket.emit("join-ROOM",formInput)
+            socket.emit("create-room",formInput)
             socket.on("response",res=>{
                 if(res === "connected"){
                     setPrivateRoomId(formInput)
@@ -37,8 +36,6 @@ function RoomsInfo({socket,setPrivateRoomId}) {
         if(!socket) return
         const roomId = socket.id.slice(15)
         setPrivateRoomId(roomId)
-        gameState.p1.name = context
-        socket.emit("game-state-create",gameState)
     },[socket])
     return (
         <section className="roomContainer">
