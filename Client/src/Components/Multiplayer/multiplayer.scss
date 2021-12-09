@@ -106,4 +106,33 @@
   & > h2 {
     margin-top: 1rem;
   }
+  .tileImage {
+    height: 100%;
+    width: 100%;
+    fill: red;
+  }
+  .verdictAlert {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    width: 400px;
+    height: 300px;
+    border: 1px solid black;
+    border-radius: 8px;
+    h1 {
+      margin-top: auto;
+      word-break: break-all;
+      font-size: 2rem;
+    }
+    button {
+      margin: auto auto 1rem auto;
+      width: 150px;
+      font-size: 1.5rem;
+    }
+  }
 }
